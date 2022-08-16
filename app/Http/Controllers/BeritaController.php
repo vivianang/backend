@@ -17,13 +17,12 @@ class BeritaController extends Controller
     {
         $berita = Berita::query()->join('admins', 'admins.id_admin', '=', 'beritas.id_admin')->get();
         $admin = Admin::query()->get();
-        echo $berita;
         $data = [
             'berita' => $berita,
             'admin' => $admin
         ];
 
-        return $data;
+        return response()->json([$data], 200);
     }
 
     /**
@@ -52,7 +51,7 @@ class BeritaController extends Controller
             'id_admin' => $request->id_admin,
             'isi_berita' => $request->isi_berita,
         ]);
-        return "Data berhasil tersimpan";
+        return response('Data Berhasil Ditambah',200);
     }
 
     /**
@@ -76,7 +75,7 @@ class BeritaController extends Controller
     {
         $berita = Berita::find($id);
 
-        return response()->json(['data' => $berita]);
+        return response()->json(['data' => $berita], 200);
     }
 
     /**
@@ -98,7 +97,7 @@ class BeritaController extends Controller
             'isi_berita' => $request->isi_berita,
         ];
         $berita = Berita::query()->where('id_berita', '=', $id)->update($param);
-        return 'Data Berita Berhasil Diubah';
+        return response('Data Berhasil Diubah',200);
     }
 
     /**
@@ -110,6 +109,6 @@ class BeritaController extends Controller
     public function destroy($id)
     {
         $berita = Berita::query()->where('id_berita', '=', $id)->delete();
-        return 'Data Berita Berhasil Dihapus';
+        return response('Data Berhasil Dihapus',200);
     }
 }

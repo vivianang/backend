@@ -19,7 +19,7 @@ class AdminController extends Controller
 
         $data=['$admin'=>$admin];
 
-        return $data;
+        return response()->json([$data], 200);
     }
 
     /**
@@ -51,7 +51,7 @@ class AdminController extends Controller
             "password" => Hash::make($request->password),
         ]);
 
-        return 'Data Admin Berhasil Ditambah';
+        return response('Data Berhasil Ditambah',200);
     }
 
     /**
@@ -75,7 +75,7 @@ class AdminController extends Controller
     {
         $admin = Admin::find($id);
 
-        return response()->json(['data' => $admin]);
+        return response()->json(['data' => $admin], 200);
     }
 
     /**
@@ -98,7 +98,7 @@ class AdminController extends Controller
         ];
 
         $admin = Admin::query()->where('id_admin', '=', $id)->update($param);
-        return 'Data Admin Berhasil Diubah';
+        return response('Data Berhasil Diubah',200);
     }
 
     /**
@@ -110,6 +110,6 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $admin = Admin::query()->where('id_admin', '=', $id)->delete();
-        return 'Data Admin Berhasil Dihapus';
+        return response('Data Berhasil Dihapus',200);
     }
 }
