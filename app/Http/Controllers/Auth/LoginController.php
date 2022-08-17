@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
+use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -12,12 +12,12 @@ class LoginController extends Controller
 {
     public function login(Request $request){
         $request->validate([
-            'username' => 'required',
+            'email' => 'required',
             'password' => 'required',
             'device_name' => 'required',
         ]);
 
-        $user = Admin::where('username', $request->username)->first();
+        $user = Pengguna::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json(['code' => 404, "message" => "User Not Found", 'errors' => ['The provided credentials are incorrect.']]);
