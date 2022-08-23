@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Komplain;
 use App\Models\Pengguna;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class KomplainController extends Controller
 {
@@ -54,11 +55,12 @@ class KomplainController extends Controller
             "tanggal" => "required",
             "status" => "required"
         ]);
+        $path = Storage::disk('public_uploads')->putFile('foto', $request->file('foto'));
         $komplain = Komplain::create([
             'id_pengguna' => $request->id_pengguna,
             'alamat' => $request->alamat,
             "berkas" => $request->berkas,
-            "foto" => $request->foto,
+            "foto" => $path,
             "isi" => $request->isi,
             "kategori" => $request->kategori,
             "no_komplain" => $request->no_komplain,
