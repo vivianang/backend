@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/sanctum/token', [LoginController::class, 'login'])->name('login.token');
+Route::post('/admin/login', [\App\Http\Controllers\Auth\LoginAdminController::class, 'login'])->name('admin.login');
 Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->get('/admin', [AdminController::class, 'index']);
@@ -58,6 +59,7 @@ Route::middleware('auth:sanctum')->post('/komplain', [KomplainController::class,
 Route::middleware('auth:sanctum')->get('/komplain/{id}', [KomplainController::class, 'edit']);
 Route::middleware('auth:sanctum')->put('/komplain/update/{id}', [KomplainController::class, 'update']);
 Route::middleware('auth:sanctum')->delete('/komplain/delete/{id}', [KomplainController::class, 'destroy']);
+Route::middleware('auth:sanctum')->get('/komplain/by/{kategori}', [KomplainController::class, 'getKomplainByKategori']);
 
 Route::middleware('auth:sanctum')->get('/status-komplain', [StatusKomplainController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/status-komplain', [StatusKomplainController::class, 'store']);
@@ -69,6 +71,6 @@ Route::middleware('auth:sanctum')->get('/suka', [SukaController::class, 'index']
 Route::middleware('auth:sanctum')->post('/suka', [SukaController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/suka/{id}', [SukaController::class, 'edit']);
 
-Route::middleware('auth:sanctum')->get('/balasan', [BalasanController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/balasan/{idKomplain}', [BalasanController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/balasan', [BalasanController::class, 'store']);
-Route::middleware('auth:sanctum')->get('/balasan/{id}', [BalasanController::class, 'edit']);
+Route::middleware('auth:sanctum')->get('/balasan/edit/{id}', [BalasanController::class, 'edit']);

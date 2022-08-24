@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Komplain;
 use App\Models\Pengguna;
+use App\Models\Status_Komplain;
 use Illuminate\Http\Request;
+use DB;
 
 class KomplainController extends Controller
 {
@@ -65,6 +67,8 @@ class KomplainController extends Controller
             "tanggal" => $request->tanggal,
             "status" => $request->status
         ]);
+        $status_komplain = new Status_Komplain();
+
         return response('Data Berhasil Ditambah',200);
     }
 
@@ -138,5 +142,16 @@ class KomplainController extends Controller
     {
         $komplain = Komplain::query()->where('id_komplain', '=', $id)->delete();
         return response('Data Berhasil Dihapus',200);
+    }
+
+    public function getKomplainByKategori($kategori){
+        $komplain = Komplain::query()->join('penggunas', 'penggunas.id_pengguna', '=', 'komplains.id_pengguna')
+            ->join('penduduks', 'penggunas.id_penduduk', '=', 'penduduks.id_penduduk')
+            ->leftJoin('sukas', 'komplains.id_komplain', '=', 'sukas.id_komplain')
+            ->leftJoin('balasans', 'komplains.id_komplain', '=', 'balasans.id_komplain')
+            ->where('komplains.kategori', '=', $kategori)
+            ->select('komplains.*', 'penduduks.nama_penduduk as nama',  DB::raw("count(sukas.id_komplain) as jml_suka"), DB::raw("count(balasans.id_komplain) as jml_balas"))->groupBy('komplains.id_komplain')->get();
+
+        return response()->json($komplain, 200);
     }
 }

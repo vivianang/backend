@@ -13,16 +13,17 @@ class BalasanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($idKomplain)
     {
         $balasan = Balasan::query()->join('komplains', 'balasans.id_komplain', '=', 'komplains.id_komplain')
             ->join('penggunas', 'penggunas.id_Pengguna', '=', 'balasans.id_Pengguna')
+            ->leftJoin('admins', 'admins.id_admin', '=', 'balasans.id_Pengguna')
+            ->where('komplains.id_komplain', '=', $idKomplain)
             ->get();
-        $data = [
-            'balasan' => $balasan,
-        ];
+        if(count($balasan) == 0)
+            return response()->json([$balasan], 404);
 
-        return response()->json([$data], 200);
+        return response()->json($balasan, 200);
     }
 
     /**
@@ -43,17 +44,17 @@ class BalasanController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user();
         $validated = $request->validate([
             'id_komplain' => 'required',
-            "id_pengguna" => "required",
             "balasan" => "required"
         ]);
         $balasan = Balasan::create([
             'id_komplain' => $request->id_komplain,
-            'id_pengguna' => $request->id_pengguna,
+            'id_pengguna' => $user->id_admin,
             "balasan" => $request->balasan
         ]);
-        return response('Data Berhasil Ditambah',200);
+        return response($balasan,200);
     }
 
     /**

@@ -55,6 +55,9 @@ class StatusKomplainController extends Controller
             "pesan" => $request->pesan,
             "status" => $request->status,
         ]);
+        Komplain::query()->where('id_komplain', '=', $request->id_komplain)->update([
+            'status' => $request->status
+        ]);
         return response('Data Berhasil Ditambah',200);
     }
 
