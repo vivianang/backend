@@ -6,7 +6,7 @@ use App\Models\Komplain;
 use App\Models\Pengguna;
 use App\Models\Status_Komplain;
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\Storage;
 
 class KomplainController extends Controller
 {
@@ -56,11 +56,11 @@ class KomplainController extends Controller
             "tanggal" => "required",
             "status" => "required"
         ]);
+        $path = Storage::disk('public_uploads')->putFile('foto', $request->file('foto'));
         $komplain = Komplain::create([
             'id_pengguna' => $request->id_pengguna,
             'alamat' => $request->alamat,
             "berkas" => $request->berkas,
-            "foto" => $request->foto,
             "isi" => $request->isi,
             "kategori" => $request->kategori,
             "no_komplain" => $request->no_komplain,
@@ -143,7 +143,6 @@ class KomplainController extends Controller
         $komplain = Komplain::query()->where('id_komplain', '=', $id)->delete();
         return response('Data Berhasil Dihapus',200);
     }
-
     public function getKomplainByKategori($kategori){
         $komplain = Komplain::query()->join('penggunas', 'penggunas.id_pengguna', '=', 'komplains.id_pengguna')
             ->join('penduduks', 'penggunas.id_penduduk', '=', 'penduduks.id_penduduk')
@@ -154,4 +153,5 @@ class KomplainController extends Controller
 
         return response()->json($komplain, 200);
     }
+
 }
