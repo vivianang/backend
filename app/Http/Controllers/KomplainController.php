@@ -8,6 +8,8 @@ use App\Models\Status_Komplain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+use DB;
+
 class KomplainController extends Controller
 {
     /**
