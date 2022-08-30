@@ -17,11 +17,8 @@ class SukaController extends Controller
         $suka = Suka::query()->join('komplains', 'sukas.id_komplain', '=', 'komplains.id_komplain')
             ->join('penggunas', 'penggunas.id_Pengguna', '=', 'sukas.id_Pengguna')
             ->get();
-        $data = [
-            'suka' => $suka,
-        ];
 
-        return response()->json([$data], 200);
+        return response()->json($suka, 200);
     }
 
     /**
@@ -43,12 +40,12 @@ class SukaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_komplain' => 'required',
-            "id_pengguna" => "required"
+            'id_komplain' => 'required'
         ]);
+
         $pengguna = Suka::create([
             'id_komplain' => $request->id_komplain,
-            'id_pengguna' => $request->id_pengguna
+            'id_pengguna' => $request->user()->id_pengguna
         ]);
         return response('Data Berhasil Ditambah',200);
     }
@@ -98,5 +95,12 @@ class SukaController extends Controller
     public function destroy(Suka $suka)
     {
         //
+    }
+
+    public function checkStatusLike($id, Request $request){
+        $suka = Suka::query()->where('id_komplain', '=', $id)->where('id_pengguna', '=', $request->user()->id_pengguna)->first();
+        if(is_null($suka))
+            return response()->json($suka, 404);
+        return response()->json($suka, 200);
     }
 }

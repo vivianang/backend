@@ -23,7 +23,10 @@ class LoginController extends Controller
             return response()->json(['code' => 404, "message" => "User Not Found", 'errors' => ['The provided credentials are incorrect.']]);
         }
 
-        return response()->json(['code' => 200, "message" => "User Found", 'access_token' => $user->createToken($request->device_name)->plainTextToken]);
+        $accessToken = $user->createToken($request->device_name)->plainTextToken;
+        $id_penduduk = $user->id_penduduk;
+
+        return response()->json(['code' => 200, "message" => "User Found", 'access_token' => $accessToken, 'id_penduduk' => $id_penduduk ]);
     }
 
     public function logout(Request $request){

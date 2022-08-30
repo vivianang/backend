@@ -15,6 +15,12 @@ class Pengguna extends Model
         'id_penduduk',
         "email",
         "password",
-        "no_telpon",
+        "no_telpon"
     ];
+
+    protected $with = ['penduduk'];
+
+    public function penduduk(){
+        return $this->belongsTo('App\Models\Penduduk', 'id_penduduk');
+    }
 }

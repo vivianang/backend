@@ -38,6 +38,8 @@ Route::middleware('auth:sanctum')->delete('/admin/delete/{id}', [AdminController
 
 Route::middleware('auth:sanctum')->get('/berita', [BeritaController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/berita', [BeritaController::class, 'store']);
+Route::middleware('auth:sanctum')->post('/berita-balasan', [BeritaController::class, 'addBalasan']);
+Route::middleware('auth:sanctum')->get('/berita-balasan/{id}', [BeritaController::class, 'getBalasan']);
 Route::middleware('auth:sanctum')->get('/berita/{id}', [BeritaController::class, 'edit']);
 Route::middleware('auth:sanctum')->put('/berita/update/{id}', [BeritaController::class, 'update']);
 Route::middleware('auth:sanctum')->delete('/berita/delete/{id}', [BeritaController::class, 'destroy']);
@@ -68,6 +70,7 @@ Route::middleware('auth:sanctum')->put('/status-komplain/update/{id}', [StatusKo
 Route::middleware('auth:sanctum')->delete('/status-komplain/delete/{id}', [StatusKomplainController::class, 'destroy']);
 
 Route::middleware('auth:sanctum')->get('/suka', [SukaController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/status-suka/{id}', [SukaController::class, 'checkStatusLike']);
 Route::middleware('auth:sanctum')->post('/suka', [SukaController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/suka/{id}', [SukaController::class, 'edit']);
 

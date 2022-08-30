@@ -47,29 +47,26 @@ class KomplainController extends Controller
      */
     public function store(Request $request)
     {
+//        \Log::info(json_encode($request->all()));
         $validated = $request->validate([
-            'id_pengguna' => 'required',
             "alamat" => "required",
-            "berkas" => "required",
-            "foto" => "required",
             "isi" => "required",
             "kategori" => "required",
             "no_komplain" => "required",
-            "tanggal" => "required",
             "status" => "required"
         ]);
         $path = Storage::disk('public_uploads')->putFile('foto', $request->file('foto'));
         $komplain = Komplain::create([
-            'id_pengguna' => $request->id_pengguna,
+            'id_pengguna' => $request->user()->id_pengguna,
             'alamat' => $request->alamat,
             "berkas" => $request->berkas,
             "isi" => $request->isi,
             "kategori" => $request->kategori,
             "no_komplain" => $request->no_komplain,
-            "tanggal" => $request->tanggal,
-            "status" => $request->status
+            "tanggal" => date("Y-m-d"),
+            "status" => $request->status,
+            "foto" => $path
         ]);
-        $status_komplain = new Status_Komplain();
 
         return response('Data Berhasil Ditambah',200);
     }
@@ -149,9 +146,10 @@ class KomplainController extends Controller
         $komplain = Komplain::query()->join('penggunas', 'penggunas.id_pengguna', '=', 'komplains.id_pengguna')
             ->join('penduduks', 'penggunas.id_penduduk', '=', 'penduduks.id_penduduk')
             ->leftJoin('sukas', 'komplains.id_komplain', '=', 'sukas.id_komplain')
-            ->leftJoin('balasans', 'komplains.id_komplain', '=', 'balasans.id_komplain')
-            ->where('komplains.kategori', '=', $kategori)
-            ->select('komplains.*', 'penduduks.nama_penduduk as nama',  DB::raw("count(sukas.id_komplain) as jml_suka"), DB::raw("count(balasans.id_komplain) as jml_balas"))->groupBy('komplains.id_komplain')->get();
+            ->leftJoin('balasans', 'komplains.id_komplain', '=', 'balasans.id_komplain');
+        if($kategori != "all")
+            $komplain =  $komplain->where('komplains.kategori', '=', $kategori);
+        $komplain = $komplain->select('komplains.*', 'penduduks.nama_penduduk as nama',  DB::raw("count(sukas.id_komplain) as jml_suka"), DB::raw("count(balasans.id_komplain) as jml_balas"))->groupBy('komplains.id_komplain')->get();
 
         return response()->json($komplain, 200);
     }

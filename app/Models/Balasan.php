@@ -15,4 +15,5 @@ class Balasan extends Model
         "id_pengguna",
         "balasan"
     ];
+
 }

@@ -16,9 +16,7 @@ class PendudukController extends Controller
     {
         $penduduk=Penduduk::query()->get();
 
-        $data=['$penduduk'=>$penduduk];
-
-        return response()->json([$data], 200);
+        return response()->json($penduduk, 200);
     }
 
     /**
@@ -80,7 +78,7 @@ class PendudukController extends Controller
     {
         $penduduk = Penduduk::find($id);
 
-        return response()->json(['data' => $penduduk], 200);
+        return response()->json($penduduk, 200);
     }
 
     /**
