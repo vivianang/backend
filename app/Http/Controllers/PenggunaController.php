@@ -44,12 +44,24 @@ class PenggunaController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'id_penduduk' => 'required',
-            "email" => "required",
+        $validator = \Validator::make($request->all(), [
+            'id_penduduk' => 'required|unique:penggunas',
             "password" => "required",
             "no_telpon" => "required"
         ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), 302);
+        }
+
+        $validator = \Validator::make($request->all(), [
+            'email' => 'required|unique:penggunas',
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), 409);
+        }
+
         $pengguna = Pengguna::create([
             'id_penduduk' => $request->id_penduduk,
             'email' => $request->email,

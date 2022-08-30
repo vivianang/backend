@@ -123,4 +123,13 @@ class PendudukController extends Controller
         $penduduk = Penduduk::query()->where('id_penduduk', '=', $id)->delete();
         return response('Data Berhasil Dihapus',200);
     }
+
+    public function searchPendudukByNik($nik)
+    {
+        $penduduk = Penduduk::query()->where('nik', '=', $nik)->first();
+        if(!$penduduk)
+            return response()->json($penduduk, 404);
+
+        return response($penduduk, 200);
+    }
 }

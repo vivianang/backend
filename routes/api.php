@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/sanctum/token', [LoginController::class, 'login'])->name('login.token');
 Route::post('/admin/login', [\App\Http\Controllers\Auth\LoginAdminController::class, 'login'])->name('admin.login');
+Route::get('/penduduk-search/{nik}', [PendudukController::class, 'searchPendudukByNik']);
 Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->get('/admin', [AdminController::class, 'index']);
