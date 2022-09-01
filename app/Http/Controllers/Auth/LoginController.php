@@ -24,7 +24,7 @@ class LoginController extends Controller
         }
 
         $accessToken = $user->createToken($request->device_name)->plainTextToken;
-        $id_penduduk = $user->id_penduduk;
+        $id_penduduk = $user->id_pengguna;
 
         return response()->json(['code' => 200, "message" => "User Found", 'access_token' => $accessToken, 'id_penduduk' => $id_penduduk ]);
     }

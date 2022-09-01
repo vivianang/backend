@@ -59,13 +59,39 @@ class KomplainController extends Controller
         $komplain = Komplain::create([
             'id_pengguna' => $request->user()->id_pengguna,
             'alamat' => $request->alamat,
-            "berkas" => $request->berkas,
+            "berkas" => "",
             "isi" => $request->isi,
             "kategori" => $request->kategori,
             "no_komplain" => $request->no_komplain,
             "tanggal" => date("Y-m-d"),
             "status" => $request->status,
             "foto" => $path
+        ]);
+
+        return response('Data Berhasil Ditambah',200);
+    }
+
+    public function storeBerkas(Request $request)
+    {
+        \Log::info(json_encode($request->all()));
+        $validated = $request->validate([
+            "alamat" => "required",
+            "isi" => "required",
+            "kategori" => "required",
+            "no_komplain" => "required",
+            "status" => "required"
+        ]);
+        $path = Storage::disk('public_uploads')->putFile('berkas', $request->file('berkas'));
+        $komplain = Komplain::create([
+            'id_pengguna' => $request->user()->id_pengguna,
+            'alamat' => $request->alamat,
+            "berkas" => $path,
+            "isi" => $request->isi,
+            "kategori" => $request->kategori,
+            "no_komplain" => $request->no_komplain,
+            "tanggal" => date("Y-m-d"),
+            "status" => $request->status,
+            "foto" => ""
         ]);
 
         return response('Data Berhasil Ditambah',200);

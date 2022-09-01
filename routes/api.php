@@ -57,13 +57,13 @@ Route::get('/pengguna/{id}', [PenggunaController::class, 'edit']);
 Route::put('/pengguna/update/{id}', [PenggunaController::class, 'update']);
 Route::delete('/pengguna/delete/{id}', [PenggunaController::class, 'destroy']);
 
+Route::middleware('auth:sanctum')->get('/komplain/by/{kategori}', [KomplainController::class, 'getKomplainByKategori']);
 Route::middleware('auth:sanctum')->get('/komplain', [KomplainController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/komplain', [KomplainController::class, 'store']);
+Route::middleware('auth:sanctum')->post('/berkas-komplain', [KomplainController::class, 'storeBerkas']);
 Route::middleware('auth:sanctum')->get('/komplain/{id}', [KomplainController::class, 'edit']);
 Route::middleware('auth:sanctum')->put('/komplain/update/{id}', [KomplainController::class, 'update']);
 Route::middleware('auth:sanctum')->delete('/komplain/delete/{id}', [KomplainController::class, 'destroy']);
-Route::middleware('auth:sanctum')->get('/komplain/by/{kategori}', [KomplainController::class, 'getKomplainByKategori']);
-
 Route::middleware('auth:sanctum')->get('/status-komplain', [StatusKomplainController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/status-komplain', [StatusKomplainController::class, 'store']);
 Route::middleware('auth:sanctum')->get('/status-komplain/{id}', [StatusKomplainController::class, 'edit']);
