@@ -53,11 +53,12 @@ Route::delete('/penduduk/delete/{id}', [PendudukController::class, 'destroy']);
 
 Route::get('/pengguna', [PenggunaController::class, 'index']);
 Route::post('/pengguna', [PenggunaController::class, 'store']);
-Route::get('/pengguna/{id}', [PenggunaController::class, 'edit']);
+Route::middleware('auth:sanctum')->get('/pengguna/{id}', [PenggunaController::class, 'edit']);
 Route::put('/pengguna/update/{id}', [PenggunaController::class, 'update']);
 Route::delete('/pengguna/delete/{id}', [PenggunaController::class, 'destroy']);
 
 Route::middleware('auth:sanctum')->get('/komplain/by/{kategori}', [KomplainController::class, 'getKomplainByKategori']);
+Route::middleware('auth:sanctum')->get('/komplain/pengguna/{id}', [KomplainController::class, 'getKomplainByPengguna']);
 Route::middleware('auth:sanctum')->get('/komplain', [KomplainController::class, 'index']);
 Route::middleware('auth:sanctum')->post('/komplain', [KomplainController::class, 'store']);
 Route::middleware('auth:sanctum')->post('/berkas-komplain', [KomplainController::class, 'storeBerkas']);
@@ -69,6 +70,8 @@ Route::middleware('auth:sanctum')->post('/status-komplain', [StatusKomplainContr
 Route::middleware('auth:sanctum')->get('/status-komplain/{id}', [StatusKomplainController::class, 'edit']);
 Route::middleware('auth:sanctum')->put('/status-komplain/update/{id}', [StatusKomplainController::class, 'update']);
 Route::middleware('auth:sanctum')->delete('/status-komplain/delete/{id}', [StatusKomplainController::class, 'destroy']);
+Route::middleware('auth:sanctum')->get('/chart-komplain', [KomplainController::class, 'getCountKomplai']);
+
 
 Route::middleware('auth:sanctum')->get('/suka', [SukaController::class, 'index']);
 Route::middleware('auth:sanctum')->get('/status-suka/{id}', [SukaController::class, 'checkStatusLike']);

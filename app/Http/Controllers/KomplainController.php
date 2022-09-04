@@ -168,6 +168,7 @@ class KomplainController extends Controller
         $komplain = Komplain::query()->where('id_komplain', '=', $id)->delete();
         return response('Data Berhasil Dihapus',200);
     }
+
     public function getKomplainByKategori($kategori){
         $komplain = Komplain::query()->join('penggunas', 'penggunas.id_pengguna', '=', 'komplains.id_pengguna')
             ->join('penduduks', 'penggunas.id_penduduk', '=', 'penduduks.id_penduduk')
@@ -178,6 +179,21 @@ class KomplainController extends Controller
         $komplain = $komplain->select('komplains.*', 'penduduks.nama_penduduk as nama',  DB::raw("count(sukas.id_komplain) as jml_suka"), DB::raw("count(balasans.id_komplain) as jml_balas"))->groupBy('komplains.id_komplain')->get();
 
         return response()->json($komplain, 200);
+    }
+
+    public function getKomplainByPengguna($id){
+        $komplain = Komplain::query()->join('penggunas', 'penggunas.id_pengguna', '=', 'komplains.id_pengguna')
+            ->join('penduduks', 'penggunas.id_penduduk', '=', 'penduduks.id_penduduk')
+            ->leftJoin('sukas', 'komplains.id_komplain', '=', 'sukas.id_komplain')
+            ->leftJoin('balasans', 'komplains.id_komplain', '=', 'balasans.id_komplain')->where('penduduks.id_penduduk', '=', $id);
+        $komplain = $komplain->select('komplains.*', 'penduduks.nama_penduduk as nama',  DB::raw("count(sukas.id_komplain) as jml_suka"), DB::raw("count(balasans.id_komplain) as jml_balas"))->groupBy('komplains.id_komplain')->get();
+
+        return response()->json($komplain, 200);
+    }
+
+    public function getCountKomplai(){
+        $komplain = Komplain::query()->select('kategori', DB::raw('COUNT(*) as "jumlah_komplain"'), DB::raw('count(*) *100 / (select count(*) from komplains) as persen'))->groupBy('kategori')->get();
+        return response($komplain, 200);
     }
 
 }

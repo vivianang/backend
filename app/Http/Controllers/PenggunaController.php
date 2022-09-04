@@ -16,14 +16,10 @@ class PenggunaController extends Controller
      */
     public function index()
     {
-        $pengguna = Pengguna::query()->join('penduduks', 'penduduks.id_penduduk', '=', 'penggunas.id_penduduk')->get();
-        $penduduk = Penduduk::query()->get();
-        $data = [
-            'pengguna' => $pengguna,
-            'penduduk' => $penduduk
-        ];
+        $pengguna = Pengguna::query()->join('penduduks', 'penduduks.id_penduduk', '=', 'penggunas.id_penduduk')
+            ->select('nik',  'email',  'nama_penduduk', 'no_telpon', 'id_pengguna')->get();
 
-        return response()->json([$data], 200);
+        return response()->json($pengguna, 200);
     }
 
     /**
@@ -88,11 +84,12 @@ class PenggunaController extends Controller
      * @param  \App\Models\Pengguna  $pengguna
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-        $pengguna = Pengguna::find($id);
+        $user = $request->user();
+        $pengguna = Pengguna::query()->join('penduduks', 'penggunas.id_penduduk', '=', 'penduduks.id_penduduk')->where('id_pengguna', '=', $user->id_pengguna)->first();
 
-        return response()->json(['data' => $pengguna], 200);
+        return response()->json($pengguna, 200);
     }
 
     /**

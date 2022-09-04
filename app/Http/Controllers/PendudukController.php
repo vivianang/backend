@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Penduduk;
+use App\Models\Pengguna;
 use Illuminate\Http\Request;
 
 class PendudukController extends Controller
@@ -121,6 +122,7 @@ class PendudukController extends Controller
     public function destroy($id)
     {
         $penduduk = Penduduk::query()->where('id_penduduk', '=', $id)->delete();
+        Pengguna::query()->where('id_penduduk', '=', $id)->delete();
         return response('Data Berhasil Dihapus',200);
     }
 
